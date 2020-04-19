@@ -1,73 +1,81 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
+import Navbar from './components/navbar.js'
+import DropDown from './components/dropDownList.js'
 
-class CurrencyConverter extends React.Component {
+// check status after fetch
+const checkStatus = (response) => {
+  if (response.ok) {
+    // .ok returns true if response status is 200-299
+    return response;
+  }
+  throw new Error('Request was either a 404 or 500');
+}
+
+// convert data into jsoin format
+const json = (response) => response.json()
+
+//------------------------------------------------------------------------
+// currency converter main
+class CurrencyConverter extends React.Component { //changed
   constructor(props) {
     super(props);
+
     this.state = {
-      rate: 0.89,
-      usd: 1,
-      euro: 1 * 0.89,
+      base: "",
+      date: '',
+      rates: null,
     };
-
-    this.handleUsdChange = this.handleUsdChange.bind(this);
-    this.handleEuroChange = this.handleEuroChange.bind(this);
   }
 
-  handleUsdChange(event) { //
-    const euro = this.convert(event.target.value, this.state.rate, this.toEuro);
-
-    this.setState({
-      usd: event.target.value,
-      euro
-    });
+  componentDidMount() {
+    this.fetchPrimaryCurrency();
   }
 
-  handleEuroChange(event) { // checked
-    const usd = this.convert(event.target.value, this.state.rate, this.toUsd);
-
-    this.setState({
-      euro: event.target.value,
-      usd
-    });
+  fetchPrimaryCurrency(country) {
+    //const code = string(country);
+    fetch("https://alt-exchange-rate.herokuapp.com/latest?base=USD")
+      .then(checkStatus)
+      .then(json)
+      .then((response) => {
+        console.log(response);
+        this.setState({ rates: response.rates });
+      })
+      .catch(error => {
+        console.error(error.message);
+      })
   }
 
-  convert(amount, rate, equation) { // checked
+  handleTopChange(event) {
+    //const currency1 = this.convert(event.taget.value, this.state., this.)
+  }
+
+  changeToBottomCurrency(amount, rate) {
+    //return amount * this.state.rates{}
+  }
+
+  convert(amount, rate, equation) { // should be fine
     const input = parseFloat(amount);
 
-    if (Number.isNaN(input)) {
+    if (Number.isNan(input)) {
       return '';
     }
-    return equation(input, rate).toFixed(3);
+    return equation(input, rate).toFixed(4);
   }
 
-  toUsd(amount, rate) { // checked
-    return amount * (1 / rate);
+  findSecondaryCurrency() {
+    //if
   }
 
-  toEuro(amount, rate) { // checked
-    return amount * rate;
-  }
-
-  render() { // checked
-    const { rate, usd, euro } = this.state;
+  render() {
+    const { base, date, rates } = this.state;
 
     return (
-      <div className="container">
+      <div id="container" className="container-fluid">
+        <Navbar />
         <div className="text-center p-3 mb-2">
           <h2 className="mb-2">Currency Converter</h2>
-          <h4>USD 1 : {rate} EURO</h4>
         </div>
-        <div className="row text-center">
-          <div className="col-12">
-            <span className="mr-1">USD</span>
-            <input value={usd} onChange={this.handleUsdChange} type="number" />
-            <span className="mx-3">=</span>
-            <input value={euro} onChange={this.handleEuroChange} type="number" />
-            <span className="ml-1">EURO</span>
-          </div>
-        </div>
+        <DropDown rates={rates} />
       </div>
     )
   }

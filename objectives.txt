@@ -1,0 +1,24 @@
+Your project needs to satisfy the following basic requirements:
+
+A list showing exchange rates for a base currency against a list of currencies:
+  User can change the base currency, and the list of rates will be updated.
+  You can either use a drop down menu or a list of links to implement the base currency selection feature. It is up to you, but make sure it's intuitive.
+
+A currency converter for a pair of currency, where the user can:
+  Edit the amount to be converted. Either allow user to swap the direction of the currency pair, or allow amounts on both sides to be edited.
+  Allow the user to change the currencies being calculated. Using a drop down menu or other means you think is intuitive.
+
+Has a navigation bar:  -- created still need some css --
+  Site name, can be super generic or super fun.
+  Anchor links if you are going to have multiple pages.
+
+Has a footer: -- kind of done put it inside navbar --
+  Link to your portfolio site or social media accounts.
+
+It needs to be responsive, which means it can be easily used on a mobile browser as well!
+Version managed with Git, and has a GitHub repository.
+You need to deploy the production build either onto Netlify or Heroku (Heroku preferred).
+
+When you are done, please submit the GitHub repo and the production website URL.
+
+// need to edit the route instead of using href

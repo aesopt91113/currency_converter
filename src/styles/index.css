@@ -1,3 +1,6 @@
+@import '~/bootstrap/dist/css/bootstrap.min.css';
+@import './App.css';
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -10,4 +13,17 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+#root, #container {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+.logocolor {
+  color: #dd60f0 !important;
+}
+
+#title {
+  color: #e38f3b;
 }
