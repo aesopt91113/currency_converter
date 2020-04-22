@@ -1,33 +1,34 @@
 import React from 'react'
 
-const DropDown = ({ rates }) => {
+const DropDown = ({ rates, base, base2, value1, value2, changeBaseCurrency, changeSecondaryCurrency, convert }) => {
   if (!rates) return null;
-
-  console.log(Object.entries(rates))
 
   return (
     <div>
+      <h4 className="ml-4">Base Currency</h4>
       <div className="text-center d-flex inline-block ml-4 mb-2 dropdown">
-        <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown">USD</button>
+        <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown">{base}</button>
         <div className="dropdown-menu">
           {
-            Object.keys(rates).map((key) => <a className="dropdown-item" href="#">{key}</a>)
+            Object.keys(rates).map((key) => <a className="dropdown-item" href="#" onClick={changeBaseCurrency}>{key}</a>)
           }
         </div>
-        <input type="number" className="form-control col-4 ml-2" placeholder="1.0000" />
+        <input type="number" className="form-control col-4 ml-2" placeholder={value1} onInput={convert} />
       </div>
 
+      <h4 className="ml-4">Secondary</h4>
       <div className="text-center d-flex inline-block ml-4 dropdown">
-        <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown">HKG</button>
+        <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown">{base2}</button>
         <div className="dropdown-menu">
-          <a className="dropdown-item" href="#">Action</a>
-          <a className="dropdown-item" href="#">Another action</a>
-          <a className="dropdown-item" href="#">Something else here</a>
+          {
+            Object.keys(rates).map((key) => <a className="dropdown-item" href="#" onClick={changeSecondaryCurrency}>{key}</a>)
+          }
         </div>
-        <input type="number" className="form-control col-4 ml-2" placeholder="1.0000" />
+        <input type="number" className="form-control col-4 ml-2" placeholder={value2}/>
       </div>
     </div>
   )
 }
+//}
 
 export default DropDown;

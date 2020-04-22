@@ -27,3 +27,8 @@ code {
 #title {
   color: #e38f3b;
 }
+
+.dropdown-menu{
+    max-height: 400px;
+    overflow-y: auto;
+}
