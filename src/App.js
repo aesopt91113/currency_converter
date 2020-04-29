@@ -15,7 +15,7 @@ const checkStatus = (response) => {
 // convert data into jsoin format
 const json = (response) => response.json()
 
-//------------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // currency converter main
 class CurrencyConverter extends React.Component { //changed
   constructor(props) {
@@ -26,18 +26,21 @@ class CurrencyConverter extends React.Component { //changed
       date: '',
       rates: null,
       base2: "HKD",
-      rates2: null,
-      value: '1.0000',
-      value2: null
+      quote1: null,
+      quote2: null,
+      amount1: "",
+      finalAmount: ""
     };
 
     this.changeBaseCurrency = this.changeBaseCurrency.bind(this);
     this.changeSecondaryCurrency = this.changeSecondaryCurrency.bind(this);
     this.fetchUpdate = this.fetchUpdate.bind(this);
-    //this.convert = this.convert.bind(this);
+    this.conversion = this.conversion.bind(this);
   }
 
   componentDidMount() {
+    //const finalAmount = this.props.convertedAmount;
+
     this.fetchDefault();
   }
 
@@ -48,8 +51,32 @@ class CurrencyConverter extends React.Component { //changed
       .then((response) => {
           this.setState({
           rates: response.rates,
-          value1: "1.000",
-          value2: response.rates[this.state.base2]
+          quote1: "1.000",
+          quote2: response.rates[this.state.base2]
+        })
+      // console.log(this.state.quote2, response.rates[this.state.base2])
+      })
+      .catch(error => {
+        console.error(error.message);
+      })
+  }
+
+  fetchUpdate(location) { // checked
+    // clear all input
+    this.setState({
+      amount1: "",
+      finalAmount: ""
+    })
+    // fetch new currency
+    fetch(`https://alt-exchange-rate.herokuapp.com/latest?base=${location}`)
+      .then(checkStatus)
+      .then(json)
+      .then((response) => {
+        this.setState({
+          base: response.base,
+          rates: response.rates,
+          quote1: "1.000",
+          quote2: response.rates[this.state.base2],
         })
       })
       .catch(error => {
@@ -57,59 +84,43 @@ class CurrencyConverter extends React.Component { //changed
       })
   }
 
-  fetchUpdate(location, boolean) {
-    fetch(`https://alt-exchange-rate.herokuapp.com/latest?base=${location}`)
-      .then(checkStatus)
-      .then(json)
-      .then((response) => {
-        if (boolean === true) {
-          this.setState({
-            base: response.base,
-            rates: response.rates,
-            value1: "1.000",
-            value2: response.rates[this.state.base2]
-          })
-        } else {
-          this.setState({
-            base2: response.base,
-            rates: response.rates,
-            value1: response.rates[this.state.base],
-            value2: "1.000"
-          })
-        }
+  conversion(event, boolean) {
+    if (boolean) {
+      this.setState({
+        amount1: event.target.value,
+        finalAmount: event.target.value * this.state.quote2 || ""
       })
-      .catch(error => {
-        console.error(error.message);
+    } else {
+      this.setState({
+        amount1: event.target.value * (1 / this.state.quote2) || "",
+        finalAmount: event.target.value
       })
+    }
+
+  // const conversionRate = this.props.quote2;
+    // const total = parseFloat(this.state.originalAmount * conversionRate).toFixed(4);
+  //    console.log(conversionRate, this.state.convertedAmount, this.state.originalAmount)
+
+    // this.setState({ convertedAmount: total });
   }
 
-  changeBaseCurrency(event) {
-    const primaryBase = event.target.text
-    const a = true;
-    console.log(primaryBase)
+  changeBaseCurrency(event) { //checked
+    const primaryBase = event.target.text;
 
-    // refresh new pricing according to the change of base currency
-    this.fetchUpdate(primaryBase, true);
+    this.fetchUpdate(primaryBase);
   }
 
-  changeSecondaryCurrency(event) {
-    const secondaryBase = event.target.text
-    const b = false;
-    console.log(secondaryBase)
-    // add value conversion and set base value as $1
-    this.fetchUpdate(secondaryBase, false)
-  }
+  changeSecondaryCurrency(event) { //checked
+    const secondaryBase = event.target.text;
 
-  // convert(event) {
-  //   const conversionRate = this.state.value2;
-  //   const tempAnswer = userInput * conversionRate;
-  //   this.setState({ value2: tempAnswer});
-  //
-  //   // return <input type="number" className="form-control col-4 ml-2" value={tempAnswer} />;
-  // }
+    this.setState({
+      base2: secondaryBase,
+      quote2: this.state.rates[secondaryBase]
+    })
+  }
 
   render() {
-    const { base, rates, base2, rates2, value1, value2} = this.state;
+    const { base, rates, base2, quote1, quote2, amount1, finalAmount } = this.state;
 
     return (
       <div>
@@ -118,10 +129,10 @@ class CurrencyConverter extends React.Component { //changed
           <div className="text-center p-3 mb-2">
             <h2 className="mb-2">Currency Converter</h2>
           </div>
-          <DropDown rates={rates} base={base} base2={base2} value1={value1} value2={value2} changeBaseCurrency={this.changeBaseCurrency} changeSecondaryCurrency={this.changeSecondaryCurrency} />
+          <DropDown rates={rates} base={base} base2={base2} quote1={quote1} quote2={quote2} changeBaseCurrency={this.changeBaseCurrency} changeSecondaryCurrency={this.changeSecondaryCurrency} conversion={this.conversion} amount1={amount1} finalAmount={finalAmount} />
         </div>
         <div>
-          <ListAllRate />
+          <ListAllRate rates={rates}/>
         </div>
       </div>
     )
