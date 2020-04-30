@@ -32,3 +32,19 @@ code {
     max-height: 400px;
     overflow-y: auto;
 }
+
+.rateColor {
+  color: black;
+}
+
+.footerBackground {
+  background-color: #282c34
+}
+
+.footerText {
+  color: white
+}
+
+.footerLogoColor {
+  color: white
+}

@@ -18,7 +18,7 @@ const DropDown = ({ rates, base, base2, quote1, quote2, amount1, finalAmount, ch
 
       <h4 className="ml-4">Secondary</h4>
       <div className="text-center d-flex inline-block ml-4 dropdown">
-        <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown">{base2}</button>
+        <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown">{base2}</button>
         <div className="dropdown-menu">
           {
             Object.keys(rates).map((key) => <a className="dropdown-item" href="#" onClick={changeSecondaryCurrency} key={key}>{key}</a>)

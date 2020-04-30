@@ -8,7 +8,7 @@ const ListAllRate = ({ rates }) => {
       {
         Object.keys(rates).map((key) => {
           return (
-            <div key={key}>{key}: {rates[key]}</div>
+            <div className="rateColor" key={key}>{key}: {rates[key]}</div>
           )
         })
       }
