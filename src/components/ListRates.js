@@ -1,6 +1,6 @@
 import React from 'react'
 
-const ListAllRate = ({ rates }) => {
+const listRates = ({ rates }) => {
   if (!rates) return null;
 
   return (
@@ -8,7 +8,7 @@ const ListAllRate = ({ rates }) => {
       {
         Object.keys(rates).map((key) => {
           return (
-            <div className="rateColor" key={key}>{key}: {rates[key]}</div>
+            <div className="rateColor" key={key}>{rates[key]}</div>
           )
         })
       }
@@ -16,4 +16,4 @@ const ListAllRate = ({ rates }) => {
   )
 }
 
-export default ListAllRate;
+export default listRates;
