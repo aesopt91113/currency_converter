@@ -1,5 +1,4 @@
 import React from 'react'
-import $ from 'jquery'
 import Navbar from './components/navbar.js'
 import DropDown from './components/dropDownList.js'
 import ListAllRate from './components/ListAllRate.js'
@@ -126,7 +125,7 @@ class CurrencyConverter extends React.Component { //changed
 					</div>
 					<DropDown rates={rates} base={base} base2={base2} quote1={quote1} quote2={quote2} changeBaseCurrency={this.changeBaseCurrency} changeSecondaryCurrency={this.changeSecondaryCurrency} conversion={this.conversion} amount1={amount1} finalAmount={finalAmount} />
 				</div>
-				<div className="container-fluid pt-2 pl-4 pb-2 text-center">
+				<div className="container-fluid pt-2 pl-4 pb-2 text-center border-top">
 					<h4>Currency Rate</h4>
 					<ListAllRate rates={rates}/>
 				</div>
