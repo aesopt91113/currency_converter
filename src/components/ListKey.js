@@ -1,12 +1,12 @@
 import React from 'react'
 
-const ListKey = ({ rates }) => {
-  if (!rates) return null;
+const ListKey = ({ listRate }) => {
+  if (!listRate) return null;
 
   return (
     <div>
       {
-        Object.keys(rates).map((key) => {
+        Object.keys(listRate).map((key) => {
           return (
             <div className="rateColor" key={key}>{key}:</div>
           )

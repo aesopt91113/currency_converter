@@ -1,6 +1,5 @@
 import React from 'react'
 
-
 const DropDown = ({ rates, base, base2, quote1, quote2, amount1, finalAmount, changeBaseCurrency, changeSecondaryCurrency, conversion }) => {
   if (!rates) return null;
 
@@ -30,6 +29,5 @@ const DropDown = ({ rates, base, base2, quote1, quote2, amount1, finalAmount, ch
     </div>
   )
 }
-//}
 
 export default DropDown;

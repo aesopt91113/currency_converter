@@ -3,6 +3,7 @@ import Navbar from './components/navbar.js'
 import DropDown from './components/dropDownList.js'
 import ListKey from './components/ListKey.js'
 import ListRates from  './components/ListRates.js'
+import CurrencyList from './components/CurrencyList.js'
 
 // check status after fetch
 const checkStatus = (response) => {
@@ -13,7 +14,7 @@ const checkStatus = (response) => {
 	throw new Error('Request was either a 404 or 500');
 }
 
-// convert data into jsoin format
+// convert data into json format
 const json = (response) => response.json()
 
 //-----------------------------------------------------------------------
@@ -30,13 +31,17 @@ class CurrencyConverter extends React.Component { //changed
 			quote1: null,
 			quote2: null,
 			amount1: "",
-			finalAmount: ""
+			finalAmount: "",
+
+			currencyBase: "USD",
+			currencyRate: null,
 		};
 
 		this.changeBaseCurrency = this.changeBaseCurrency.bind(this);
 		this.changeSecondaryCurrency = this.changeSecondaryCurrency.bind(this);
 		this.fetchUpdate = this.fetchUpdate.bind(this);
 		this.conversion = this.conversion.bind(this);
+		this.changeCurrencyList = this.changeCurrencyList.bind(this);
 	}
 
 	componentDidMount() {
@@ -53,9 +58,9 @@ class CurrencyConverter extends React.Component { //changed
 					this.setState({
 					rates: response.rates,
 					quote1: "1.000",
-					quote2: response.rates[this.state.base2]
+					quote2: response.rates[this.state.base2],
+					currencyRate: response.rates
 				})
-			// console.log(this.state.quote2, response.rates[this.state.base2])
 			})
 			.catch(error => {
 				console.error(error.message);
@@ -99,6 +104,29 @@ class CurrencyConverter extends React.Component { //changed
 		}
 	}
 
+
+	changeCurrencyList(event) {
+		const CurrencyListBase = event.target.text;
+
+		this.updateList(CurrencyListBase);
+	}
+
+	updateList(location) { // checked
+			// fetch new currency
+			fetch(`https://alt-exchange-rate.herokuapp.com/latest?base=${location}`)
+					.then(checkStatus)
+					.then(json)
+					.then((response) => {
+						this.setState({
+								currencyBase: response.base,
+								currencyRate: response.rates,
+						})
+					})
+					.catch(error => {
+							console.error(error.message);
+					})
+	}
+
 	changeBaseCurrency(event) { //checked
 		const primaryBase = event.target.text;
 
@@ -115,7 +143,7 @@ class CurrencyConverter extends React.Component { //changed
 	}
 
 	render() {
-		const { base, rates, base2, quote1, quote2, amount1, finalAmount } = this.state;
+		const { base, rates, base2, quote1, quote2, amount1, finalAmount, currencyRate, currencyBase } = this.state;
 
 		return (
 			<div>
@@ -124,10 +152,10 @@ class CurrencyConverter extends React.Component { //changed
 					<div className="text-center p-3 mb-1">
 						<h2 className="mb-2">Currency Converter</h2>
 					</div>
-					<DropDown rates={rates} base={base} base2={base2} quote1={quote1} quote2={quote2} changeBaseCurrency={this.changeBaseCurrency} changeSecondaryCurrency={this.changeSecondaryCurrency} conversion={this.conversion} amount1={amount1} finalAmount={finalAmount} />
+						<DropDown rates={rates} base={base} base2={base2} quote1={quote1} quote2={quote2} changeBaseCurrency={this.changeBaseCurrency} changeSecondaryCurrency={this.changeSecondaryCurrency} conversion={this.conversion} amount1={amount1} finalAmount={finalAmount} />
 				</div>
 				<div className="container-fluid pt-2 pl-4 pb-2 text-center border-top col-6">
-					<h4>Currency Rate</h4>
+					<CurrencyList listBase={currencyBase} listRate={currencyRate} updateList={this.changeCurrencyList}/>
 					<table class="table table-dark table-bordered">
 						<thead>
 							<tr>
@@ -137,8 +165,8 @@ class CurrencyConverter extends React.Component { //changed
 						</thead>
 						<tbody>
 							<tr>
-								<td><ListKey rates={rates}/></td>
-								<td><ListRates rates={rates}/></td>
+								<td><ListKey listRate={currencyRate}/></td>
+								<td><ListRates listRate={currencyRate}/></td>
 							</tr>
 						</tbody>
 					</table>
