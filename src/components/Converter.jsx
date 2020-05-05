@@ -14,7 +14,6 @@ export default class Converter extends React.Component {
       secondaryInput: 1,
       activeInputKey: 'primaryInput',
       conversionRates: {},
-      conversionLoading: true,
       tableBase: 'USD',
       tableRates: {},
       tableLoading: true
@@ -50,7 +49,7 @@ export default class Converter extends React.Component {
   }
 
   changePrimaryBase(newBase) {
-    this.setState({ primaryBase: newBase, conversionLoading: true })
+    this.setState({ primaryBase: newBase })
   }
 
   getConversionRates() {
@@ -64,11 +63,6 @@ export default class Converter extends React.Component {
       })
       .catch(error => {
         console.error(error.message);
-      })
-      .finally(() => {
-        this.setState({
-          conversionLoading: false
-        })
       })
   }
 
