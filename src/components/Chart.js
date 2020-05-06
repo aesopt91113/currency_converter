@@ -28,35 +28,21 @@ class Graph extends React.Component {
       country2: "HKD",
       countryName: {},
     }
-
   }
 
   componentDidMount() {
-    this.fetchDefaultChart();
+    this.fetchChart();
     this.fetchCountryName();
   }
 
+  componentDidUpdate(prevState) {
+    if (prevState.country1 !== this.state.country1 || prevState.country2 !== this.state.country2)
+      this.fetchChart();
+  }
 
-
-  // changeCountry(countryA, countryB, event) {
-  //   if (this.state.country1 !== countryA) {
-  //     const a = event.target.text;
-  //
-  //     this.setState ({
-  //       country1: a
-  //     })
-  //     console.log(this.state.country1)
-  //     this.fetchDefaultChart();
-  //   }
-  //   else if (this.state.country2 !== countryB){
-  //     const b = event.target.text;
-  //
-  //     this.setState ({
-  //       country2: b
-  //     })
-  //     this.fetchDefaultChart();
-  //   }
-  // }
+  changeCountry(oldCountry, newCountry) {
+    this.setState ({ [oldCountry]: newCountry})
+  }
 
   fetchCountryName() {
     fetch(`https://alt-exchange-rate.herokuapp.com/latest?base=${this.state.country1}`)
@@ -76,7 +62,7 @@ class Graph extends React.Component {
       })
   }
 
-  fetchDefaultChart() {
+  fetchChart() {
     fetch(`https://alt-exchange-rate.herokuapp.com/history?start_at=${this.state.dateStart}&end_at=${this.state.dateEnd}&base=${this.state.country1}&symbols=${this.state.country2}`)
       .then(checkStatus)
       .then(json)
@@ -134,7 +120,7 @@ class Graph extends React.Component {
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
               {
-                Object.keys(countryName).map((key) => <a className="dropdown-item" key={key}>{key}</a>)
+                Object.keys(countryName).map((key) => <a className="dropdown-item" key={key} onClick={() => this.changeCountry('country1', key)}>{key}</a>)
               }
             </div>
           </div>
@@ -145,7 +131,7 @@ class Graph extends React.Component {
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
               {
-                Object.keys(countryName).map((key) => <a className="dropdown-item" key={key}>{key}</a>)
+                Object.keys(countryName).map((key) => <a className="dropdown-item" key={key} onClick={() => this.changeCountry('country2', key)}>{key}</a>)
               }
             </div>
           </div>
@@ -154,7 +140,7 @@ class Graph extends React.Component {
         <hr />
 
         <div>
-          <canvas id="myChart"></canvas>
+          <canvas id="myChart" width="300" height="100"></canvas>
         </div>
       </div>
     )
