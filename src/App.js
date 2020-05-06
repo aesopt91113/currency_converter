@@ -25,14 +25,12 @@ class CurrencyConverter extends React.Component { //changed
 
 		this.state = {
 			base: "USD",
-			date: '',
 			rates: null,
 			base2: "HKD",
 			quote1: null,
 			quote2: null,
 			amount1: "",
 			finalAmount: "",
-
 			currencyBase: "USD",
 			currencyRate: null,
 		};
@@ -45,8 +43,6 @@ class CurrencyConverter extends React.Component { //changed
 	}
 
 	componentDidMount() {
-		//const finalAmount = this.props.convertedAmount;
-
 		this.fetchDefault();
 	}
 
@@ -56,14 +52,14 @@ class CurrencyConverter extends React.Component { //changed
 			.then(json)
 			.then((response) => {
 					this.setState({
-					rates: response.rates,
-					quote1: "1.000",
-					quote2: response.rates[this.state.base2],
-					currencyRate: response.rates
+						rates: response.rates,
+						quote1: "1.000",
+						quote2: response.rates[this.state.base2],
+						currencyRate: response.rates
+					})
 				})
-			})
-			.catch(error => {
-				console.error(error.message);
+				.catch(error => {
+					console.error(error.message);
 			})
 	}
 
@@ -103,7 +99,6 @@ class CurrencyConverter extends React.Component { //changed
 			})
 		}
 	}
-
 
 	changeCurrencyList(event) {
 		const CurrencyListBase = event.target.text;
@@ -148,7 +143,6 @@ class CurrencyConverter extends React.Component { //changed
 		return (
 			<div>
 				<div id="container" className="container-fluid pb-3">
-					<Navbar />
 					<div className="text-center p-3 mb-1">
 						<h2 className="mb-2">Currency Converter</h2>
 					</div>
@@ -171,11 +165,7 @@ class CurrencyConverter extends React.Component { //changed
 						</tbody>
 					</table>
 				</div>
-				<footer className="pt-2 pl-2 pb-2 footerBackground footerText d-flex inline-block justify-content-center">
-					<a className="nav-link iconpad footerLogoColor" href="https://www.instagram.com/meyran.l/" target="blank"><i className="fab fa-instagram"></i></a>
-					<a className="nav-link iconpad footerLogoColor" href="https://www.facebook.com/meyran.lee" target="blank"><i className="fab fa-facebook-square"></i></a>
-					<a className="nav-link footerLogoColor" href="https://github.com/aesopt91113" target="blank"><i className="fab fa-github"></i></a>
-				</footer>
+
 			</div>
 		)
 	}
